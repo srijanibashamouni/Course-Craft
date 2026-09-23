@@ -1,12 +1,24 @@
-const express = require("express")
+require("dotenv").config();
 
-const app = express()
+const express = require("express");
+const connectDB = require("./config/db");
 
-app.get("/welcome", (req, res)=>{
-    res.send("Welcome back")
-})
+const app = express();
 
+const dns = require("dns");
 
-app.listen(1000, ()=>{
-    console.log("listening to the PORT")
-})
+const courseRoute = require("./routes/courseRoutes");
+const authRoute = require("./routes/authRoutes");
+
+app.use(express.json());
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
+app.use("/api/course", courseRoute);
+app.use("/api/auth", authRoute);
+
+connectDB();
+
+app.listen(3000, () => {
+    console.log("Listening to port.....");
+});
